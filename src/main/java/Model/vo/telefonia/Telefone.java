@@ -1,7 +1,7 @@
 package Model.vo.telefonia;
 
 public class Telefone {
-	
+
 	private Integer id;
 	private Integer idCliente;
 	private String ddd;
@@ -13,14 +13,21 @@ public class Telefone {
 		super();
 	}
 
-	public Telefone(String ddd, String numero, boolean ativo, boolean movel, Integer id, Integer idCliente) {
+	public Telefone(String ddd, String numero, boolean ativo, boolean movel) {
 		super();
 		this.ddd = ddd;
 		this.numero = numero;
 		this.ativo = ativo;
 		this.movel = movel;
+	}
+	public Telefone(Integer id, Integer idCliente, String ddd, String numero, boolean ativo, boolean movel) {
+		super();
 		this.id = id;
 		this.idCliente = idCliente;
+		this.ddd = ddd;
+		this.numero = numero;
+		this.ativo = ativo;
+		this.movel = movel;
 	}
 
 	public String getDdd() {
@@ -69,5 +76,11 @@ public class Telefone {
 
 	public void setIdCliente(Integer idCliente) {
 		this.idCliente = idCliente;
+	}
+
+	@Override
+	public String toString() {
+		return "Telefone [id=" + id + ", idCliente=" + idCliente + ", ddd=" + ddd + ", numero=" + numero + ", ativo="
+				+ ativo + ", movel=" + movel + "]";
 	}
 }

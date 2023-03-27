@@ -3,6 +3,7 @@ package Model.vo.telefonia;
 import java.util.List;
 
 public class Cliente {
+	private Integer id;
 	private String nome;
 	private String cpf;
 	private List<Telefone> telefones;
@@ -20,6 +21,17 @@ public class Cliente {
 		this.telefones = telefones;
 		this.ativo = ativo;
 		this.endereco = endereco;
+	}
+
+	public Cliente(Integer id, String nome, String cpf, List<Telefone> telefones, boolean ativo, Endereco endereco) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.cpf = cpf;
+		this.telefones = telefones;
+		this.ativo = ativo;
+		this.endereco = endereco;
+
 	}
 
 	public String getNome() {
@@ -54,20 +66,25 @@ public class Cliente {
 		this.ativo = ativo;
 	}
 
-	@Override
-	public String toString() {
-		return " nome: " + this.getNome() 
-				+ ", cpf: " + this.getCpf() 
-				+ ", telefones: " + this.getTelefones() 
-				+ ", ativo: " + this.isAtivo()
-				+ ", endereco: " + this.getEndereco();
-	}
-
 	public Endereco getEndereco() {
 		return endereco;
 	}
 
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return " nome: " + this.getNome() + ", cpf: " + this.getCpf() + ", telefones: " + this.getTelefones()
+				+ ", ativo: " + this.isAtivo() + ", endereco: " + this.getEndereco();
 	}
 }

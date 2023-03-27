@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import Model.dao.Banco;
 import Model.vo.telefonia.Endereco;
@@ -76,16 +78,72 @@ public class TelefoneDAO {
 	public Telefone consultaTelefonePorId(int id) {
 		Telefone telefoneConsultado = null;
 		Connection conexao = Banco.getConnection();
-		String sql = " SELECT FROM TELEFONE "
-				+ " WHERE ID = ? ";
+		String sql = " SELECT * FROM TELEFONE "
+				   + " WHERE ID = ? ";
 		PreparedStatement query = Banco.getPreparedStatement(conexao, sql);
 		
 		try {
 			query.setInt(1, id);
 			ResultSet resultado = query.executeQuery();
 			
+			if(resultado.next()) {
+				telefoneConsultado = new Telefone();
+				telefoneConsultado.setId(resultado.getInt("Ddd"));
+				telefoneConsultado.setNumero(resultado.getString("Numero"));
+				telefoneConsultado.setNumero(resultado.getString("Ativo"));
+				telefoneConsultado.setNumero(resultado.getString("Movel"));
+				telefoneConsultado.setIdCliente(resultado.getInt("idCliente"));
+				}	
 
+		}catch(SQLException e) {
+			System.out.println("Erro ao executar a consultar do telefone!"
+					+ "\nCausa: " + e.getMessage());
+		}finally{
+			Banco.closePreparedStatement(query);
+			Banco.closeConnection(conexao);
 		}
 	return telefoneConsultado;
+	}
+	
+	public boolean excluir(int id) {
+		boolean excluiu = false;
+		Connection conexao = Banco.getConnection();
+		String sql = " DELETE FROM TELEFONE "
+				   + " WHERE ID = ? ";
+		PreparedStatement query = Banco.getPreparedStatement(conexao, sql);
+		try {
+			query.setInt(1, id);
+			int quantidadeDeLinhasAtualizadas = query.executeUpdate();
+			excluiu = quantidadeDeLinhasAtualizadas > 0;
+			
+		}catch(SQLException excecao) {
+			System.out.println("Erro ao atualizar telefone!"
+					+ "\n Causa: " + excecao.getMessage());
+		}finally {
+			Banco.closePreparedStatement(query);
+			Banco.closeConnection(conexao);
+		}
+		
+		return excluiu;
+	}
+
+	public List<Telefone> consultarPorIdCliente(Integer id) {
+		List<Telefone> telefones = new ArrayList<Telefone>();
+		Connection conexao = Banco.getConnection();
+		String sql = " SELECT * FROM TELEFONE ";
+		PreparedStatement query = Banco.getPreparedStatement(conexao, sql);
+
+		try {
+			ResultSet resultado = query.executeQuery();
+
+			while (resultado.next()) {
+				Telefone telefoneConsultado = conververterDeResultSetParaEntidade(resultado);
+				telefones.add(telefoneConsultado);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultuar todos endereços." + "\nCausa: " + e.getMessage());
+		}
+		return telefones;
 	}
 }
