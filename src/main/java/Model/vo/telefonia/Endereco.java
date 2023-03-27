@@ -1,12 +1,14 @@
 package Model.vo.telefonia;
 
 public class Endereco {
+	private Integer id;
 	private String cep;
 	private String rua;
 	private String numero;
 	private String bairro;
 	private String cidade;
 	private String estado;
+	
 
 	public Endereco() {
 		super();
@@ -20,6 +22,18 @@ public class Endereco {
 		this.bairro = bairro;
 		this.cidade = cidade;
 		this.estado = estado;
+	}
+
+	public Endereco(Integer id, String cep, String rua, String numero, String bairro, String cidade, String estado) {
+		super();
+		this.id = id;
+		this.cep = cep;
+		this.rua = rua;
+		this.numero = numero;
+		this.bairro = bairro;
+		this.cidade = cidade;
+		this.estado = estado;
+		
 	}
 
 	public String getCep() {
@@ -68,5 +82,19 @@ public class Endereco {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return "Endereco [cep=" + cep + ", rua=" + rua + ", numero=" + numero + ", bairro=" + bairro + ", cidade="
+				+ cidade + ", estado=" + estado + "]";
 	}
 }
