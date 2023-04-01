@@ -146,4 +146,36 @@ public class TelefoneDAO {
 		}
 		return telefones;
 	}
+	
+	public List<Telefone> consultarTodos() {
+		List<Telefone> telefones = new ArrayList<Telefone>();
+		Connection conexao = Banco.getConnection();
+		String sql = "SELECT * FROM TELEFONE";
+		PreparedStatement query = Banco.getPreparedStatement(conexao, sql);
+		try {
+			ResultSet resultado = query.executeQuery();
+			while(resultado.next()) {
+				Telefone telefoneConsultado = conververterDeResultSetParaEntidade(resultado);
+				telefones.add(telefoneConsultado);
+			}
+		}catch(SQLException e) {
+			System.out.println("Erro ao consultar todos os telefones!" + 
+					"\nCausa: " + e.getMessage());
+		}finally{
+			Banco.closePreparedStatement(query);
+			Banco.closeConnection(conexao);
+		}
+		return telefones;
+	}
+	
+	private Telefone conververterDeResultSetParaEntidade(ResultSet resultado) throws SQLException {
+		Telefone telefoneConsultado = new Telefone();
+		telefoneConsultado.setId(resultado.getInt("id"));
+		telefoneConsultado.setIdCliente(resultado.getInt("idCliente"));
+		telefoneConsultado.setDdd(resultado.getString("ddd"));
+		telefoneConsultado.setNumero(resultado.getString("numero"));
+		telefoneConsultado.setAtivo(resultado.getBoolean("ativo"));
+		telefoneConsultado.setMovel(resultado.getBoolean("movel"));
+		return telefoneConsultado;
+	}
 }
