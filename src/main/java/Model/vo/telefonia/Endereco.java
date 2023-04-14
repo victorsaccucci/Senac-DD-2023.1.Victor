@@ -94,7 +94,11 @@ public class Endereco {
 
 	@Override
 	public String toString() {
-		return "Endereco [cep=" + cep + ", rua=" + rua + ", numero=" + numero + ", bairro=" + bairro + ", cidade="
-				+ cidade + ", estado=" + estado + "]";
+		return "Cep:" + this.getCep() 
+			 + " Rua:" + this.getRua() 
+			 + " Número: " + this.getNumero() 
+			 + " Bairro:" + this.getBairro() 
+			 + " Cidade:" + this.getCidade() 
+			 + " Estado:" + this.getEstado();
 	}
 }

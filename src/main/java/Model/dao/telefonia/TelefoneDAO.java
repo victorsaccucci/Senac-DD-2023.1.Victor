@@ -12,47 +12,42 @@ import Model.vo.telefonia.Endereco;
 import Model.vo.telefonia.Telefone;
 
 public class TelefoneDAO {
+
 	public Telefone inserir(Telefone novoTelefone) {
-		
-		//Concetar ao banco
+		// Concetar ao banco
 		Connection conexao = Banco.getConnection();
-		String sql = "INSERT INTO TELEFONE (DDD, NUMERO, ATIVO, MOVEL)"
-				+ "VALUES(?, ?, ?, ?)";
-		
+		String sql = "INSERT INTO TELEFONE (DDD, NUMERO, ATIVO, MOVEL)" + "VALUES(?, ?, ?, ?)";
+
 		PreparedStatement query = Banco.getPreparedStatementWithPk(conexao, sql);
-		
-		//Executar o insert
+		// Executar o insert
 		try {
 			query.setString(1, novoTelefone.getDdd());
 			query.setString(2, novoTelefone.getNumero());
 			query.setBoolean(3, novoTelefone.isAtivo());
 			query.setBoolean(4, novoTelefone.isMovel());
 			query.execute();
-			
-		//Preencher o id
+
+			// Preencher o id
 			ResultSet resultado = query.getGeneratedKeys();
-			if(resultado.next()) {
+			if (resultado.next()) {
 				novoTelefone.setId(resultado.getInt(1));
 			}
-			
-		}catch(SQLException e){
+
+		} catch (SQLException e) {
 			System.out.println("Erro ao inserir o novo telefone!" + "\nCausa:" + e);
-		}finally {
-		//Fechar conexão
+		} finally {
+			// Fechar conexão
 			Banco.closeConnection(conexao);
 			Banco.closePreparedStatement(query);
 		}
 		return novoTelefone;
 	}
-	
+
 	public boolean atualizar(Telefone telefoneEditado) {
-		
 		boolean atualizou = false;
 		Connection conexao = Banco.getConnection();
-		String sql = " UPDATE TELEFONE "
-				+ " SET DDD = ?, NUMERO = ?, ATIVO = ?, MOVEL = ? "
-				+ " WHERE ID = ? ";
-		
+		String sql = " UPDATE TELEFONE " + " SET DDD = ?, NUMERO = ?, ATIVO = ?, MOVEL = ? " + " WHERE ID = ? ";
+
 		PreparedStatement query = Banco.getPreparedStatement(conexao, sql);
 		try {
 			query.setObject(1, telefoneEditado.getDdd());
@@ -60,70 +55,65 @@ public class TelefoneDAO {
 			query.setObject(3, telefoneEditado.isAtivo());
 			query.setObject(4, telefoneEditado.isMovel());
 			query.setInt(5, telefoneEditado.getId());
-			
+
 			int quantidadeDeLinhasAtualizadas = query.executeUpdate();
 			atualizou = quantidadeDeLinhasAtualizadas > 0;
-			
-		}catch(SQLException e) {
-			System.out.println("Erro ao atualizar o telefone!"
-					+ "\nCausa: " + e.getMessage());
-		}finally {
+
+		} catch (SQLException e) {
+			System.out.println("Erro ao atualizar o telefone!" + "\nCausa: " + e.getMessage());
+		} finally {
 			Banco.closePreparedStatement(query);
 			Banco.closeConnection(conexao);
 		}
-	
-	return atualizou;
+
+		return atualizou;
 	}
 
 	public Telefone consultaTelefonePorId(int id) {
 		Telefone telefoneConsultado = null;
 		Connection conexao = Banco.getConnection();
-		String sql = " SELECT * FROM TELEFONE "
-				   + " WHERE ID = ? ";
+		String sql = " SELECT * FROM TELEFONE " + " WHERE ID = ? ";
 		PreparedStatement query = Banco.getPreparedStatement(conexao, sql);
-		
+
 		try {
 			query.setInt(1, id);
 			ResultSet resultado = query.executeQuery();
-			
-			if(resultado.next()) {
+
+			if (resultado.next()) {
 				telefoneConsultado = new Telefone();
 				telefoneConsultado.setId(resultado.getInt("Ddd"));
 				telefoneConsultado.setNumero(resultado.getString("Numero"));
 				telefoneConsultado.setNumero(resultado.getString("Ativo"));
 				telefoneConsultado.setNumero(resultado.getString("Movel"));
 				telefoneConsultado.setIdCliente(resultado.getInt("idCliente"));
-				}	
+			}
 
-		}catch(SQLException e) {
-			System.out.println("Erro ao executar a consultar do telefone!"
-					+ "\nCausa: " + e.getMessage());
-		}finally{
+		} catch (SQLException e) {
+			System.out.println("Erro ao executar a consultar do telefone!" + "\nCausa: " + e.getMessage());
+		} finally {
 			Banco.closePreparedStatement(query);
 			Banco.closeConnection(conexao);
 		}
-	return telefoneConsultado;
+		return telefoneConsultado;
 	}
-	
+
 	public boolean excluir(int id) {
 		boolean excluiu = false;
 		Connection conexao = Banco.getConnection();
-		String sql = " DELETE FROM TELEFONE "
-				   + " WHERE ID = ? ";
+		String sql = " DELETE FROM TELEFONE " + " WHERE ID = ? ";
 		PreparedStatement query = Banco.getPreparedStatement(conexao, sql);
 		try {
 			query.setInt(1, id);
 			int quantidadeDeLinhasAtualizadas = query.executeUpdate();
 			excluiu = quantidadeDeLinhasAtualizadas > 0;
-			
-		}catch(SQLException excecao) {
-			System.out.println("Erro ao atualizar telefone!"
-					+ "\n Causa: " + excecao.getMessage());
-		}finally {
+
+		} catch (SQLException excecao) {
+			System.out.println("Erro ao atualizar telefone!" + "\n Causa: " + excecao.getMessage());
+		} finally {
 			Banco.closePreparedStatement(query);
 			Banco.closeConnection(conexao);
 		}
-		
+
 		return excluiu;
 	}
 
@@ -146,7 +136,7 @@ public class TelefoneDAO {
 		}
 		return telefones;
 	}
-	
+
 	public List<Telefone> consultarTodos() {
 		List<Telefone> telefones = new ArrayList<Telefone>();
 		Connection conexao = Banco.getConnection();
@@ -154,20 +144,19 @@ public class TelefoneDAO {
 		PreparedStatement query = Banco.getPreparedStatement(conexao, sql);
 		try {
 			ResultSet resultado = query.executeQuery();
-			while(resultado.next()) {
+			while (resultado.next()) {
 				Telefone telefoneConsultado = conververterDeResultSetParaEntidade(resultado);
 				telefones.add(telefoneConsultado);
 			}
-		}catch(SQLException e) {
-			System.out.println("Erro ao consultar todos os telefones!" + 
-					"\nCausa: " + e.getMessage());
-		}finally{
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar todos os telefones!" + "\nCausa: " + e.getMessage());
+		} finally {
 			Banco.closePreparedStatement(query);
 			Banco.closeConnection(conexao);
 		}
 		return telefones;
 	}
-	
+
 	private Telefone conververterDeResultSetParaEntidade(ResultSet resultado) throws SQLException {
 		Telefone telefoneConsultado = new Telefone();
 		telefoneConsultado.setId(resultado.getInt("id"));
@@ -177,5 +166,34 @@ public class TelefoneDAO {
 		telefoneConsultado.setAtivo(resultado.getBoolean("ativo"));
 		telefoneConsultado.setMovel(resultado.getBoolean("movel"));
 		return telefoneConsultado;
+	}
+
+	public void ativarTelefones(Integer idDono, List<Telefone> telefones) {
+		for (Telefone telefoneDoCliente : telefones) {
+			telefoneDoCliente.setIdCliente(idDono);
+			telefoneDoCliente.setAtivo(true);
+			if (telefoneDoCliente.getId() > 0) {
+				// UPDATE no Telefone
+				this.atualizar(telefoneDoCliente);
+			} else {
+				// INSERT no Telefone
+				this.inserir(telefoneDoCliente);
+			}
+		}
+	}
+
+	public void desativarTelefones(int idCliente) {
+		Connection conn = Banco.getConnection();
+		String sql = " UPDATE EXEMPLOS.TELEFONE " + " SET id_cliente=NULL, ativo=0 " + " WHERE ID_CLIENTE=? ";
+
+		PreparedStatement stmt = Banco.getPreparedStatement(conn, sql);
+
+		try {
+			stmt.setInt(1, idCliente);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Erro ao desativar telefone.");
+			System.out.println("Erro: " + e.getMessage());
+		}
 	}
 }

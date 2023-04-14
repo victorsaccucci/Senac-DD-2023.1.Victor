@@ -13,21 +13,16 @@ import java.util.Scanner;
 
 public class EnderecoDAO {
 
-	/**
-	 * Insere um novo endereco no banco
-	 * 
-	 * @param novoEndereco o telefone a ser persistido
-	 * @return o endereco inserido com a chaeve primária gerada
-	 */
 
 	public Endereco inserir(Endereco novoEndereco) {
 		// Conectar ao banco
 		Connection conexao = Banco.getConnection();
-		String sql = " INSERT INTO ENDERECO (RUA, CEP, BAIRRO, CIDADE, ESTADO, NUMERO) " + " VALUES (?, ?, ?, ?, ?, ?)";
+		String sql = " INSERT INTO ENDERECO (RUA, CEP, BAIRRO, " + " CIDADE, ESTADO, NUMERO) "
+				+ " VALUES (?,?,?,?,?,?) ";
 
 		PreparedStatement query = Banco.getPreparedStatementWithPk(conexao, sql);
 
-		// Executar o INSERT
+		// executar o INSERT
 		try {
 			query.setString(1, novoEndereco.getRua());
 			query.setString(2, novoEndereco.getCep());
@@ -42,6 +37,7 @@ public class EnderecoDAO {
 			if (resultado.next()) {
 				novoEndereco.setId(resultado.getInt(1));
 			}
+
 		} catch (SQLException e) {
 			System.out.println("Erro ao inserir endereço. " + "\nCausa: " + e.getMessage());
 		} finally {
@@ -144,17 +140,14 @@ public class EnderecoDAO {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("Erro ao buscar todos os endereços" 
-					+ "\n Causa: " + e.getMessage());
-			
-		}finally {
+			System.out.println("Erro ao buscar todos os endereços" + "\n Causa: " + e.getMessage());
+
+		} finally {
 			Banco.closeConnection(conexao);
 			Banco.closePreparedStatement(query);
 		}
 		return enderecos;
 	}
-		
-	
 
 	private Endereco conververterDeResultSetParaEntidade(ResultSet resultado) throws SQLException {
 		Endereco enderecoConsultado = new Endereco();
