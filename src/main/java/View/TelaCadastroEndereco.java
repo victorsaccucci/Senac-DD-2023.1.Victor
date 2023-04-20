@@ -34,7 +34,7 @@ public class TelaCadastroEndereco  {
 	private JComboBox cbEstado;
 
 	// TODO chamar API ou backend futuramente
-	private String[] estados = { "Paraná", "Rio Grande do Sul", "Santa Catarina" };
+	private String[] estados = { "PR", "RS", "SC" };
 
 	/**
 	 * Launch the application.
@@ -134,6 +134,7 @@ public class TelaCadastroEndereco  {
 				endereco.setNumero(txtNumero.getText());
 				endereco.setCidade(txtCidade.getText());
 				endereco.setEstado((String) cbEstado.getSelectedItem());
+				endereco.setBairro(txtBairro.getText());;
 
 				EnderecoController controller = new EnderecoController();
 				try {

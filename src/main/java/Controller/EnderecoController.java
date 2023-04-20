@@ -24,6 +24,7 @@ private EnderecoBO bo = new EnderecoBO();
 		mensagemValidacao += validarString(endereco.getRua(), "rua");
 		mensagemValidacao += validarString(endereco.getNumero(), "número");
 		mensagemValidacao += validarString(endereco.getCidade(), "cidade");
+		mensagemValidacao += validarString(endereco.getBairro(), "bairro");
 		mensagemValidacao += validarString(endereco.getEstado(), "estado");
 		
 		if(!mensagemValidacao.isEmpty()) {

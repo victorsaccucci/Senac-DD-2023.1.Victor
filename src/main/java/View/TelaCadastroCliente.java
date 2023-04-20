@@ -113,7 +113,7 @@ public class TelaCadastroCliente {
 		EnderecoController endController = new EnderecoController();
 		List<Endereco> enderecosCadastrados = endController.consultarTodos();
 
-		cbEndereco = new JComboBox(enderecosCadastrados.toArray());
+		cbEndereco = new JComboBox<Object>(enderecosCadastrados.toArray());
 		cbEndereco.setBackground(new Color(192, 192, 192));
 		cbEndereco.setBounds(85, 92, 291, 19);
 		frmNovoCliente.getContentPane().add(cbEndereco);
